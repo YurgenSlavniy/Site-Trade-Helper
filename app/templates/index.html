@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block title %}Главная страница!{% endblock %}
+
+{% block content %}
+
+{% if posts %}
+	<h5>Выведенно из базы данных MYSQL</h5>
+	{% for post in posts %}
+		<div>
+			<h4>{{ post['id'] }} {{ post['title'] }}</h4>
+			<p>{{ post['content'] }}</p>
+		</div>
+	{% endfor %}
+
+{% endif %}
+
+{% endblock %}

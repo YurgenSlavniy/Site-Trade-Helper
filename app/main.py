@@ -1,11 +1,19 @@
 from flask import Blueprint, render_template
+from app import connect
 
 bp = Blueprint('main', __name__)
 
 
 @bp.route('/')
 def main_page():
-    return render_template('index.html')
+    connection = connect()
+    result = False
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute('select * from posts', ())
+            result = cursor.fetchall()
+
+    return render_template('index.html', posts=result)
 
 
 @bp.route('/page1')
