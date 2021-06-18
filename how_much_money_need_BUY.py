@@ -46,6 +46,41 @@ def buyMinValueOrderGeneration ():
             for order in buy_orders_generation:
                 print(order)
     else:
-        print('Здесь участок код для растановки при нецелочисленном делении')
+
+        orders_count = 1
+        order_price = price
+        buy_order_value = round(order_price * min_buy_order_value, 2)
+        buy_orders_generation = []
+        buy_orders_generation.append(
+            '{}) цена: {}   количество: {}   сумма: {} '.format(orders_count, order_price, min_buy_order_value,
+                                                                buy_order_value))
+        profit_buy_order_value = buy_order_value
+        while len(buy_orders_generation) <= buy_orders_count:
+            orders_count += 1
+            order_price = round(order_price - trade_step, 2)
+            buy_order_value = round(order_price * min_buy_order_value, 2)
+            buy_orders_generation.append(
+                '{}) цена: {}   количество: {}   сумма: {} '.format(orders_count, order_price, min_buy_order_value,
+                                                                    buy_order_value))
+            profit_buy_order_value = round(profit_buy_order_value + buy_order_value, 2)
+
+        orders_count += 1
+        order_price = min_price
+        buy_order_value = min_buy_order_value * min_price
+        profit_buy_order_value = round(profit_buy_order_value + min_buy_order_value * min_price, 2)
+
+        buy_orders_generation.append(
+            '{}) цена: {}   количество: {}   сумма: {} '.format(orders_count, order_price, min_buy_order_value,
+                                                                buy_order_value))
+        profit_buy_order_value = round(profit_buy_order_value, 2)
+
+        print('\nНа отрезке цены от {} до {} RUB с шагом {} RUB\nбудет выставлено {} ордеров \nна общую сумму {} RUB'
+              .format(min_price, price, trade_step, orders_count, profit_buy_order_value))
+        enter = input('\nПроизвести генерацию ордеров? (ДА/НЕТ): ')
+        enter = enter.upper()
+        if enter == 'ДА':
+            for order in buy_orders_generation:
+                print(order)
+
 
 buyMinValueOrderGeneration()
