@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from app import connect
+from pprint import pprint
 
 bp = Blueprint('main', __name__)
 
@@ -14,6 +15,11 @@ def main_page():
             result = cursor.fetchall()
 
     return render_template('index.html', posts=result)
+
+
+@bp.route('/calculate/buy', methods=['POST'])
+def calculate_buy():
+    return request.form
 
 
 @bp.route('/page1')
