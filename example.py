@@ -38,7 +38,14 @@ limit = int(input('limit:') or 100)
 result = request.post('https://api.exmo.com/v1.1/order_book',
                        data={'pair': pair, 'limit': limit}).json()
 print(result)
-print('Это 6.05, 300.66074312, 1818.99749587 похоже на ордера цена RUB 6.05     300 EXM    1818 RUB - total')
+print('\nask_quantity - количество спроса RUB'
+      '\nask_amount - сумма спроса RUB'
+      '\nask_top - низшая цена спроса (за 24 часа) RUB'
+      '\nbid_quantity - количество заявок EXM'
+      '\nbid_amount - ?сумма завок? EXM'
+      '\nbid_top - какая то цена RUB'
+      '\nask - ордера спроса: [цена, количество на сумму] BUY ордера\nbid - ордера предложения:  [цена, количество на сумму] SELL'
+      '\n')
 print('*' * 80)
 
 print('*' * 80)
