@@ -78,7 +78,7 @@ def sellMinValueOrderGeneration (sell_trade_intervale, sell_orders_quantity, sel
             profit_sell_money = round(profit_sell_money + sell_money, 2)
             sell_orders_generation.append('{}) SELL  цена: {} RUB   количество: {} EXM на сумму: {} {}'.format(orders_count, sell_order_price, min_sell_order_value, sell_money, use_currency))
         print('\nВ интервале цены от {} до {} RUB\nБудет выставлено {} sell ордеров\nДля этого по рыночной цене {} RUB будет куплено {} EXM на сумму: {} RUB'.format(price, max_price, sell_orders_count, price, buy_for_sale, total_sell_money))
-        return sell_orders_generation, buy_for_sale, profit_sell_money
+        return sell_orders_generation, total_sell_money, profit_sell_money
 
     else:
         sell_order_price = price
@@ -95,14 +95,13 @@ def sellMinValueOrderGeneration (sell_trade_intervale, sell_orders_quantity, sel
         del sell_orders_generation[-1]
         sell_order_price = max_price
         sell_money = round(min_sell_order_value * sell_order_price, 2)
-        buy_for_sale = round( sell_orders_count * (min_order_value + (min_order_value * trade_comission / 100)), 2)
+        buy_for_sale = round( (sell_orders_count + 1) * (min_order_value + (min_order_value * trade_comission / 100)), 2)
         sell_orders_generation.append(
             '{}) SELL  цена: {} RUB   количество: {} EXM на сумму: {} {}'.format(orders_count, sell_order_price, min_sell_order_value, sell_money, use_currency))
-        buy_for_sale = round(len(sell_orders_generation) * (min_order_value + (min_order_value * trade_comission / 100)), 2)
-        total_sell_money = buy_for_sale * price
-        profit_sell_money = profit_sell_money + sell_money
+        total_sell_money = round(buy_for_sale * price, 2)
+        profit_sell_money = round(profit_sell_money + sell_money, 2)
         print('\nВ интервале цены от {} до {} RUB\nБудет выставлено {} sell ордеров\nДля этого по рыночной цене {} RUB будет куплено {} EXM на сумму: {} RUB'.format(price, max_price, len(sell_orders_generation), price, buy_for_sale, total_sell_money))
-        return sell_orders_generation, buy_for_sale, profit_sell_money
+        return sell_orders_generation, total_sell_money, profit_sell_money
 #____________________________________________________
 
 
@@ -178,7 +177,7 @@ print('\n    Итоговые данные:'
       '\nЦена на бирже на данный момент: {} RUB'
       '\nНа интервале цены от {} до {} RUB'
       '\nВсего выставленно  ордеров: {} '
-      '\nиз них BUY ордеров: {} SELL ордеров: {} '
+      '\nиз них BUY ордеров: {}, SELL ордеров: {} '
       '\nдля этой расстановки вам понадобится средств: '
       '\n--> для BUY ордеров: {} RUB'
       '\n--> для SELL ордеров: {} RUB'
