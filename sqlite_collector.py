@@ -82,7 +82,7 @@ class Collector:
 def main(argv):
 	# если аргументов недостаточно
 	if len(argv) < 2:
-		print("Usage: python ./script.py wite_time")
+		print("Usage: python %s wite_time" % argv[0])
 		sys.exit(1)
 
 	wait_time = int(argv[1])
