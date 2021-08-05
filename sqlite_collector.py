@@ -68,14 +68,16 @@ class Connector:
 class Opener:
 	def __init__(self, file_name):
 		self.file_name = file_name
+		self.descriptor = 0
 
 	def __enter__(self):
 		# здесь мы возвращаем файловый дескриптор
-		return open(self.file_name)
+		self.descriptor = open(self.file_name)
+		return self.descriptor
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
 		# здесь закрываем файловый дескриптор
-		self.file_name.close()
+		self.descriptor.close()
 
 with Opener('filename') as file_descriptor:
 	здесь должно быть понятно, ты использовал with
