@@ -1,0 +1,6 @@
+1 Папка app_site это пакет
+2 Чтобы запустить пакет требуется выполнить
+	1 set FLASK_APP=app_site    или $env:FLASK_APP=app_site
+	2 set FLASK_ENV=development или $env:FLASK_ENV=development
+	3 flask run
+3 Попробуй понять 
