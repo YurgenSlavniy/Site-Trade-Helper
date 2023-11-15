@@ -7,7 +7,7 @@ import datetime
 # Объединение датасетов
 df_first = pd.read_csv('trade-history-2021-11-07.csv')
 df_middle = pd.read_csv('trade-history-2022-10-10.csv')
-df_last = pd.read_csv('trade-history-2023-08-01.csv')
+df_last = pd.read_csv('trade-history-2023-11-01.csv')
 
 big_df = pd.concat([df_last, pd.concat([df_middle, df_first], ignore_index=True).drop_duplicates()], ignore_index=True).drop_duplicates()
 
@@ -72,9 +72,9 @@ def time_period(dataframe):
 
 # Считаем число сделок и сколько из них buy сколько sell
 def buy_sell_count(dataframe):
-	print(f"Общее число сделок: {len(dataframe)}, из них \n"
-		  f"BUY: {len(dataframe[dataframe['Тип'] == 'buy'])} \n"
-		  f"SELL: {len(dataframe[dataframe['Тип'] == 'sell'])} \n")
+    print(f"Общее число сделок: {len(dataframe)}, из них \n"
+        f"BUY: {len(dataframe[dataframe['Тип'] == 'buy'])} \n"
+        f"SELL: {len(dataframe[dataframe['Тип'] == 'sell'])} \n")
 
 # список всех валютных пар 
 def all_pairs_list(dataframe):
@@ -121,7 +121,7 @@ def dataframe_pairs_list(dataframe):
 		dataframe_all_pairs_list.append(df_curr_pair(dataframe, el))
 	return dataframe_all_pairs_list
 
-# Первичный сводный датасет с:
+# Первичный сводный датасет c:
 # - названием валютной пары
 # - общее число сделок
 # - число BUY сделок
@@ -135,7 +135,6 @@ def buy_sell_all_count(solodataframe):
 
 	a = solodataframe['Тип'].value_counts()
 
-
 	if len(a) == 2:
 		buy_count = len(solodataframe[solodataframe['Тип'] == 'buy'])
 		sell_count = len(solodataframe[solodataframe['Тип'] == 'sell'])
@@ -147,6 +146,7 @@ def buy_sell_all_count(solodataframe):
 			sell_count = len(solodataframe)
 
 	return(cur_pair, all_count, buy_count, sell_count)
+
 
 
 def cur_buy_sell_all_df(dataframe):
@@ -171,6 +171,8 @@ def cur_buy_sell_all_df(dataframe):
                          },
                            columns=['cur_pair','trd_count', 'sell_count', 'buy_count'])
 	return cur_all_buy_sell_df
+
+
 
 def months(big_df):
 	df_all_dates = big_df
@@ -264,7 +266,14 @@ def months(big_df):
       f'\nДекабрь 2023: {len(df_dec_2023)}, BUY: {len(df_dec_2023[df_dec_2023["Тип"] == "buy"])}, SELL: {len(df_dec_2023[df_dec_2023["Тип"] == "sell"])}')
 
 
-# Функции под результирующую таблицу в датафрейме. 
+def time_period_1(dataframe):
+    all_dates = dataframe['Дата/время'].tolist()
+    start = all_dates[-1]
+    end = all_dates[0]
+    start_dtm = datetime.datetime.strptime(start, '%d.%m.%Y %H:%M')
+    end_dtm = datetime.datetime.strptime(end, '%d.%m.%Y %H:%M')
+    return start_dtm, end_dtm
+
 def total_info_df(dataframe):
 
 	pair_list = all_pairs_list(dataframe)
@@ -409,7 +418,80 @@ def total_info_df(dataframe):
 
 	return total_info
 
+
+
+# Визуализация данных по Buy и Sell
+def visual_buy_sell(dataframe):
+    g = sns.countplot(dataframe['Тип'])
+    g.set_xticklabels(['buy','sell'])
+    plt.show()
+    
+# аналитика торговли (применять к одной торговой паре)
+def analitica(dataframe, current_pair):
+    current_pair_dataset_buy = dataframe.loc[(current_pair_dataset['Тип'] == 'buy')]
+    current_pair_dataset_sell = dataframe.loc[(current_pair_dataset['Тип'] == 'sell')]
+    currents_list = currents(current_pair)
+    print(f'\nминимальная цена по которой покупали: {current_pair_dataset_buy.Цена.min()} '
+          f'{currents_list[1]}\n'
+          f'максимальная цена по которой продавали: {current_pair_dataset_sell.Цена.max()} '
+          f'{currents_list[1]}\n'
+          f'oбъём купленной валюты за весь период торгов: {current_pair_dataset_buy.Количество.sum()} '
+          f'{currents_list[0]}\n'
+          f'oбъём проданной валюты за весь период торгов: {current_pair_dataset_sell.Количество.sum()} '
+          f'{currents_list[0]}\n'
+          f'потрачено денег за весь период торгов: {current_pair_dataset_buy.Сумма.sum()} '
+          f'{currents_list[1]}\n'
+          f'заработано денег за весь период торгов: {current_pair_dataset_sell.Сумма.sum()} '
+          f'{currents_list[1]}\n\n'
+          f'дельта максимальная цена - минимальная: {current_pair_dataset_sell.Цена.max() - current_pair_dataset_buy.Цена.min()} '
+          f'{currents_list[1]}\n'
+          f'разница объёмов проданный - купленный: {current_pair_dataset_sell.Количество.sum() - current_pair_dataset_buy.Количество.sum()} '
+          f'{currents_list[0]}\n'
+          f'коэфицент объёмов проданное/купленное: {round(current_pair_dataset_sell.Количество.sum()/current_pair_dataset_buy.Количество.sum(), 2)}\n'
+          f'потраченныe деньги минус заработанные: {current_pair_dataset_sell.Сумма.sum() - current_pair_dataset_buy.Сумма.sum()} '
+          f'{currents_list[1]}\n'
+          f'коэфицент потраченные/заработанные: {round(current_pair_dataset_sell.Сумма.sum()/current_pair_dataset_buy.Сумма.sum(), 2)}\n')
+
+# Проверка на дисбаланс классов
+def dissbalance(dataframe):
+    # class count
+    class_count_0, class_count_1 = dataframe['Тип'].value_counts()
+
+    # Separate class
+    class_0 = dataframe[dataframe['Тип'] == 'buy']
+    class_1 = dataframe[dataframe['Тип'] == 'sell']# print the shape of the class
+    print('buy class 0:', class_0.shape)
+    print('sell class 1:', class_1.shape)
+    
+# Изменение начального датасета, добавление демипеременных, избавление от типов object
+def prepare_data(dataframe):
+    prep_data = pd.concat([dataframe, pd.get_dummies(dataframe['Тип'])], axis=1)
+    prep_data.drop(columns=['Тип'], inplace=True)
+    prep_data = pd.concat([prep_data, pd.get_dummies(dataframe['Тип комиссии'])], axis=1)
+    prep_data.drop(columns=['Тип комиссии'], inplace=True)
+    prep_data = pd.concat([prep_data, pd.get_dummies(dataframe['Комиссия %'])], axis=1)
+    prep_data.drop(columns=['Комиссия %'], inplace=True)
+    prep_data.drop(columns=['Trade ID'], inplace=True)
+    prepare_data = to_datetime(prep_data)
+    return prepare_data
+    
+# Число сделок в день
+def per_day(dataframe):
+    new_vals = []
+    vals = dataframe['Дата/время'].values
+    for el in vals:
+        numb = el[0:2]
+        new_vals.append(numb)
+    dataframe['days'] = new_vals
+    dataframe['days'].value_counts()
+    return dataframe['days'].value_counts()
+
+
 ################################################################################
+
+
+
+
 
 def total(dataframe):
 
@@ -417,7 +499,22 @@ def total(dataframe):
 	buy_sell_count(dataframe)
 	all_pairs_info(dataframe)
 
+def total_month(dataframe):
+
+	time_period(dataframe)
+	buy_sell_count(dataframe)
+	all_pairs_info(dataframe)
 
 total(df_jul_2023)
+total(df_avg_2023)
+total(df_sep_2023)
+total(df_oct_2023)
 total(big_df)
 months(big_df)
+
+print(total_info_df(big_df))
+
+df_month = total_info_df(df_avg_2023)
+
+
+print(df_month[['pair','buy_vol','sell_vol','delta_vol','max_price','min_price','buy_money','sell_money','delta_money']])
