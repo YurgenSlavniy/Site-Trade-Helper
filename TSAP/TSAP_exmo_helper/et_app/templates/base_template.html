@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Title{% endblock title %}</title>
+</head>
+<body>
+    <div>
+        <a href="/">Главная</a> * <a href="/about/">О бирже EXMO</a> * 
+        <a href="cur_form/">Форма выбора валюты</a> * 
+        <a href="/cur_pair_forms/">Форма выбора валютной пары</a> * 
+    </div>
+    <h1>{% block header %}Это головной блок{% endblock header %}</h1>
+    <div>{% block content%}Это блок контента{% endblock content %}</div>
+    <div>2022</div>
+</body>
+</html>

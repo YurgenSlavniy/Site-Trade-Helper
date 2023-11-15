@@ -1,0 +1,33 @@
+{% extends "base_template.html" %}
+{% block title %}current_form_answer{% endblock title %}
+{% block header %}Вы выбрали валюту из списка{% endblock header %}
+  
+{% block content %}
+    <p>
+        Ваш выбор: <h3>{{curr}}</h3>
+    </p>
+    <p>
+        с выбранной вами валютой нашлось валютных пар: <h3>{{count_cur_pairs}}</h3>
+    </p>
+    <p>
+        Список валютных пар с выбранной вами валютой:
+        <ul>
+        {% for el in currents %}
+        <li>{{ el }}</li>
+        {% endfor %}
+        </ul>
+    </p>
+    <p><h3>Цены в валютных парах</h3></p>
+    <p>
+        {% for key, value in current_pairs_info.items %}
+         <p><h5>{{ key }},  : {{ value }}</h5></p>
+        {% endfor %}
+    </p>
+        <p><h3><li>Отсортированные по цене валютные пары</li></h3></p>
+    <p>
+        {% for key, value in sorted_current_pairs_info.items %}
+         <p><h5>{{ key }} : {{ value }}</h5></p>
+        {% endfor %}
+    </p>
+
+{% endblock content %}

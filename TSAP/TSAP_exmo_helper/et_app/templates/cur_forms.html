@@ -1,0 +1,24 @@
+{% extends "base_template.html" %}
+{% block title %}current_form{% endblock title %}
+{% block header %}Форма для выбора валюты{% endblock header %}
+  
+{% block content %}
+    <p>
+        Здесь вы сможете выбрать валюту из списка 
+    </p>
+    <p>
+    <form method="post" action="/cur_forms_answer/">
+        {% csrf_token %}
+        <p>
+            Валюты:<br />
+            <select multiple name="currents">
+                    {% for el in currents %}
+                    <option><li>{{ el }}</li></option>
+                    {% endfor %}
+                 
+             </select>
+        </p>
+        <input type="submit" value="Выбрать" />
+    </form>
+    </p>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends "base_template.html" %}
+{% block title %}about_exmo{% endblock title %}
+{% block header %}Список всех валютных пар и цены на бирже EXMO{% endblock header %}
+  
+{% block content %}
+<body>
+    {% for key, value in response.items %}
+        <p>Валютная пара: {{ key }},  Цена: {{ value }}</p>
+    {% endfor %}
+</body>
+{% endblock content %}

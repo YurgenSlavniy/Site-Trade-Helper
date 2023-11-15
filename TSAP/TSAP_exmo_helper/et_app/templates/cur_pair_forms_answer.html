@@ -1,0 +1,18 @@
+{% extends "base_template.html" %}
+{% block title %}current_form_answer{% endblock title %}
+{% block header %}Вы выбрали валюту из списка{% endblock header %}
+  
+{% block content %}
+    <p>
+        Ваш выбор: <h3>{{curr}}</h3>
+    </p>
+    <p>
+        данные по торговой паре с биржи EXMO.me:
+    </p>
+    <p>
+    {% for key, value in values.items %}
+        <p>{{ key }}: {{ value }}</p>
+    {% endfor %}
+    </p>
+  
+{% endblock content %}

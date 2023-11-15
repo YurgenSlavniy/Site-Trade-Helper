@@ -1,0 +1,24 @@
+{% extends "base_template.html" %}
+{% block title %}current_pair_form{% endblock title %}
+{% block header %}Форма для выбора валютной пары{% endblock header %}
+  
+{% block content %}
+    <p>
+        Здесь вы сможете выбрать валютную пару из списка 
+    </p>
+    <p>
+    <form method="post" action="/cur_pair_forms_answer/">
+        {% csrf_token %}
+        <p>
+            Валютные пары:<br />
+            <select multiple name="current_pairs">
+                    {% for el in current_pairs %}
+                    <option><li>{{ el }}</li></option>
+                    {% endfor %}
+                 
+             </select>
+        </p>
+        <input type="submit" value="Выбрать" />
+    </form>
+    </p>
+{% endblock content %}
