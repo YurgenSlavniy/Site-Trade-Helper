@@ -1,4 +1,3 @@
-# Итоговый скрипт.
 # При запуске скрипт выводит в консоль информацию полученную с биржи exmo.me
 # все торговые пары, которые торгуются с рублём и цены, отсортированные по возрастанию.
 
@@ -173,8 +172,10 @@ def output(df):
     i = 0
 
     while i < len(cur_pair_list):
-        if prices[i] < 1:
-            print(f'{i + 1}. {cur_pair_list[i]} : {prices[i]}')
+        if prices[i] < 0.1:
+            print(f'{i + 1}. {cur_pair_list[i]} : {round(prices[i], 6)}')
+        elif prices[i] < 1:
+            print(f'{i + 1}. {cur_pair_list[i]} : {round(prices[i], 4)}')
         elif prices[i] > 1 and prices[i] < 10:     
             print(f'{i + 1}. {cur_pair_list[i]} : {round(prices[i], 3)}')
         else:
